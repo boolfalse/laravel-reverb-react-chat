@@ -1,27 +1,17 @@
 
 import React, { useState } from "react";
 
-const MessageInput = () => {
-    let csrfToken = document.querySelector('meta[name="csrf-token"]')
-        .getAttribute('content');
-
+const MessageInput = ({ rootUrl }) => {
     const [message, setMessage] = useState("");
 
-    const messageRequest = (text) => {
-        fetch('http://127.0.0.1:8000/message', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": csrfToken
-            },
-            body: JSON.stringify({ text })
-        })
-            .then(response => response.json())
-            .catch((err) => {
-                console.log(err);
+    const messageRequest = async (text) => {
+        try {
+            await axios.post(`${rootUrl}/message`, {
+                text,
             });
+        } catch (err) {
+            console.log(err.message);
+        }
     };
 
     const sendMessage = (e) => {
@@ -34,6 +24,7 @@ const MessageInput = () => {
         messageRequest(message);
         setMessage("");
     };
+
     return (
         <div className="input-group">
             <input onChange={(e) => setMessage(e.target.value)}

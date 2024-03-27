@@ -25,6 +25,6 @@ class Message extends Model
 
     public function getTimeAttribute(): string
     {
-        return date("d M Y | H:i:s", strtotime($this->attributes['created_at']));
+        return date("d M Y, H:i:s", strtotime($this->attributes['created_at']));
     }
 }
